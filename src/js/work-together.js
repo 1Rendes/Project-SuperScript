@@ -85,7 +85,7 @@ footerForm.addEventListener(`submit`, async e => {
   e.preventDefault();
   validateEmail();
   validateComment();
-  if (!(validateEmail() && validateComment())) {
+  if (!(inputEmail.checkValidity() && inputComment.checkValidity())) {
     return;
   }
 
