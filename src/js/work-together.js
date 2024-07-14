@@ -19,6 +19,7 @@ const formDataString = localStorage.getItem('feedback-form-data');
 const formData = formDataString
   ? JSON.parse(formDataString)
   : { email: '', message: '' };
+export const body = document.querySelector('body');
 inputEmail.value = formData.email ? formData.email : '';
 inputComment.value = formData.message ? formData.comment : '';
 
@@ -37,9 +38,7 @@ async function createPost(email, comment) {
     throw new Error(error.res.data.message);
   }
 }
-
-footerForm.addEventListener(`submit`, async e => {
-  e.preventDefault();
+inputEmail.addEventListener('blur', () => {
   if (!inputEmail.checkValidity()) {
     inputEmail.classList.remove('correct-email');
     inputEmail.classList.add('incorrect-email');
@@ -54,6 +53,8 @@ footerForm.addEventListener(`submit`, async e => {
     errorMessage.classList.add('success-message');
     errorMessage.textContent = 'Success!';
   }
+});
+inputComment.addEventListener('blur', () => {
   if (!inputComment.checkValidity()) {
     inputComment.classList.remove('correct-email');
     inputComment.classList.add('incorrect-email');
@@ -68,7 +69,13 @@ footerForm.addEventListener(`submit`, async e => {
     errorCommMessage.classList.add('success-message');
     errorCommMessage.textContent = 'Success!';
   }
+});
 
+footerForm.addEventListener(`submit`, async e => {
+  e.preventDefault();
+  if (!(inputComment.checkValidity() && inputEmail.checkValidity())) {
+    return;
+  }
   const userEmail = inputEmail.value.trim();
   const userComment = inputComment.value.trim();
 
@@ -98,14 +105,17 @@ footerForm.addEventListener(`submit`, async e => {
 
 function showModal() {
   footerModal.classList.add('is-open');
+  body.style.overflow = 'hidden';
 }
 
 function hideModal() {
   footerModalCloseBtn.addEventListener('click', () => {
+    body.style.overflow = '';
     footerModal.classList.remove('is-open');
   });
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' || event.key === 'Esc') {
+      body.style.overflow = '';
       footerModal.classList.remove('is-open');
     }
   });
@@ -113,6 +123,7 @@ function hideModal() {
 
 window.addEventListener('click', e => {
   if (e.target == footerModal) {
+    body.style.overflow = '';
     footerModal.classList.remove('is-open');
   }
 });
