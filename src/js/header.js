@@ -5,9 +5,15 @@ const mobMenuBtn = document.querySelector('.header-mob-menubtn');
 const headerMenu = document.querySelector('.header-menu');
 const headerMobMenu = document.querySelector('.header-mob-menu');
 const headerCloseIcon = document.querySelector('.header-close-icon');
+const headerMenuList = document.querySelector('.header-menu-list');
 
 menuBtn.addEventListener('click', () => {
   headerMenu.classList.toggle('header-hidden');
+});
+headerMenuList.addEventListener('click', e => {
+  if (e.target.nodeName === 'A') {
+    headerMenu.classList.toggle('header-hidden');
+  }
 });
 mobMenuBtn.addEventListener('click', () => {
   body.style.overflow = 'hidden';
