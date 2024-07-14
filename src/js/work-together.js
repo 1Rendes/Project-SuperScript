@@ -23,6 +23,42 @@ export const body = document.querySelector('body');
 inputEmail.value = formData.email ? formData.email : '';
 inputComment.value = formData.message ? formData.comment : '';
 
+function validateEmail() {
+  if (!inputEmail.checkValidity()) {
+    inputEmail.classList.remove('correct-email');
+    inputEmail.classList.add('incorrect-email');
+    errorMessage.classList.remove('success-message');
+    errorMessage.classList.add('error-message');
+    errorMessage.textContent = 'Invalid email, try again';
+    return false;
+  } else {
+    inputEmail.classList.remove('incorrect-email');
+    inputEmail.classList.add('correct-email');
+    errorMessage.classList.remove('error-message');
+    errorMessage.classList.add('success-message');
+    errorMessage.textContent = 'Success!';
+    return true;
+  }
+}
+
+function validateComment() {
+  if (!inputComment.checkValidity()) {
+    inputComment.classList.remove('correct-email');
+    inputComment.classList.add('incorrect-email');
+    errorCommMessage.classList.remove('success-message');
+    errorCommMessage.classList.add('error-message');
+    errorCommMessage.textContent = 'Please, send us a message.';
+    return false;
+  } else {
+    inputComment.classList.remove('incorrect-email');
+    inputComment.classList.add('correct-email');
+    errorCommMessage.classList.remove('error-message');
+    errorCommMessage.classList.add('success-message');
+    errorCommMessage.textContent = 'Success!';
+    return true;
+  }
+}
+
 footerForm.addEventListener('input', () => {
   formData.email = footerForm.elements.userEmail.value.trim();
   formData.comment = footerForm.elements.userComment.value.trim();
@@ -39,43 +75,20 @@ async function createPost(email, comment) {
   }
 }
 inputEmail.addEventListener('blur', () => {
-  if (!inputEmail.checkValidity()) {
-    inputEmail.classList.remove('correct-email');
-    inputEmail.classList.add('incorrect-email');
-    errorMessage.classList.remove('success-message');
-    errorMessage.classList.add('error-message');
-    errorMessage.textContent = 'Invalid email, try again';
-    return;
-  } else {
-    inputEmail.classList.remove('incorrect-email');
-    inputEmail.classList.add('correct-email');
-    errorMessage.classList.remove('error-message');
-    errorMessage.classList.add('success-message');
-    errorMessage.textContent = 'Success!';
-  }
+  validateEmail();
 });
 inputComment.addEventListener('blur', () => {
-  if (!inputComment.checkValidity()) {
-    inputComment.classList.remove('correct-email');
-    inputComment.classList.add('incorrect-email');
-    errorCommMessage.classList.remove('success-message');
-    errorCommMessage.classList.add('error-message');
-    errorCommMessage.textContent = 'Please, send us a message.';
-    return;
-  } else {
-    inputComment.classList.remove('incorrect-email');
-    inputComment.classList.add('correct-email');
-    errorCommMessage.classList.remove('error-message');
-    errorCommMessage.classList.add('success-message');
-    errorCommMessage.textContent = 'Success!';
-  }
+  validateComment();
 });
 
 footerForm.addEventListener(`submit`, async e => {
   e.preventDefault();
-  if (!(inputComment.checkValidity() && inputEmail.checkValidity())) {
+  validateEmail();
+  validateComment();
+  if (!(validateEmail() && validateComment())) {
     return;
   }
+
   const userEmail = inputEmail.value.trim();
   const userComment = inputComment.value.trim();
 
